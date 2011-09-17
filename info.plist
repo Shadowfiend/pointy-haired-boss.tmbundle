@@ -7,8 +7,8 @@
   <key>contactName</key>
   <string>Antonio Salazar Cardozo</string>
   <key>description</key>
-  <string>153aecf0-e0c4-11e0-9572-0800200c9a66</string>
+  <string>Provides a way to interact with external processes within vico.</string>
   <key>uuid</key>
-  <string>43888860-d77d-11e0-9572-0800200c9a66</string>
+  <string>153aecf0-e0c4-11e0-9572-0800200c9a66</string>
 </dict>
 </plist>
