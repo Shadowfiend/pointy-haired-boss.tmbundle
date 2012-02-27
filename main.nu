@@ -24,6 +24,12 @@
     (((SbtTask) alloc) initWithBufferName:name launchPath:launchPath isShellScript:runInShell))
 
   (- initWithBufferName:(id)name launchPath:(id)launchPath isShellScript:(BOOL)runInShell is
+    (self initWithBufferName:name launchPath:launchPath arguments:'() isShellScript:runInShell))
+
+  (- initWithBufferName:(id)name launchPath:(id)launchPath arguments:(id)argumentList isShellScript:(BOOL)runInShell is
+    (self initWithBufferName:name launchPath:launchPath arguments:argumentList workingDirectory:((current-window baseURL) path) isShellScript:runInShell))
+
+  (- initWithBufferName:(id)name launchPath:(id)launchPath arguments:(id)argumentList workingDirectory:(id)workingDirectory isShellScript:(BOOL)runInShell is
     (super init)
 
     (set @buffer-name name)
@@ -40,11 +46,11 @@
       (if runInShell
         (then
           (@task setLaunchPath:"/bin/bash")
-          (@task setArguments:(NSArray arrayWithList:(list launchPath))))
+          (@task setArguments:(NSArray arrayWithList:(cons launchPath argumentList))))
         (else
           (@task setLaunchPath:launchPath)))
 
-      (@task setCurrentDirectoryPath:((current-window baseURL) path))
+      (@task setCurrentDirectoryPath:workingDirectory)
       (@task setStandardInput:std-in-pipe)
       (@task setStandardOutput:std-out-pipe)
       (@task setStandardError:std-err-pipe)
