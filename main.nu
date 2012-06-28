@@ -21,7 +21,7 @@
         (id) std-in)
 
   (+ phbTaskWithBufferName:(id)name launchPath:(id)launchPath isShellScript:(BOOL)runInShell is
-    (((SbtTask) alloc) initWithBufferName:name launchPath:launchPath isShellScript:runInShell))
+    (((PHBTask) alloc) initWithBufferName:name launchPath:launchPath isShellScript:runInShell))
 
   (- initWithBufferName:(id)name launchPath:(id)launchPath isShellScript:(BOOL)runInShell is
     (self initWithBufferName:name launchPath:launchPath arguments:'() isShellScript:runInShell))
