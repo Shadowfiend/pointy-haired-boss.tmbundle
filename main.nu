@@ -2,16 +2,17 @@
 
 ; Filters ANSI escape codes from the given string. Probably nowhere near foolproof.
 (function filter-escape-codes (string)
-  (/[\x03|\x1a]/
+  (/[\003\032]/
     replaceWithString:""
-             inString:(/\x1b(\[|\(|\))[;?0-9]*[0-9A-Za-z]/
+             inString:(/\c[(\[|\(|\))[;?0-9]*[0-9A-Za-z]/
                         replaceWithString:""
                                  inString:string)))
 
-; A PHBTask is used to fire up an NSTask and feed its standard error and output to a vico buffer.
-; Standard input can be written to using writeString:, and subclasses can preprocess output
-; (preprocessOutput:isError:) or just play with it without modifying the resulting output
-; (handleOutput:isError:).
+; A PHBTask is used to fire up an NSTask and feed its standard error
+; and output to a vico buffer.  Standard input can be written to using
+; writeString:, and subclasses can preprocess output
+; (preprocessOutput:isError:) or just play with it without modifying the
+; resulting output (handleOutput:isError:).
 (class PHBTask is NSObject
   (ivar (id) task
         (id) buffer-name
