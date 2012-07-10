@@ -109,5 +109,6 @@
           ((notification object) readInBackgroundAndNotify)))))
           
   (- dealloc is
+    (@task terminate)
     ((NSNotificationCenter) defaultCenter) removeObserver:self))
 
