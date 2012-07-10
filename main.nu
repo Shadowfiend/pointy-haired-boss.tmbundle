@@ -95,12 +95,14 @@
 
   (- outputReceived:(id) notification is
     (if (or (eq (notification object) @std-out) (eq (notification object) @std-err))
-      (let ((data ((notification userInfo) objectForKey:NSFileHandleNotificationDataItem))
+      (let ((isError (eq (notification object) @std-err))
+            (data ((notification userInfo) objectForKey:NSFileHandleNotificationDataItem))
             (text-storage (@buffer-text textStorage)))
         (let (line-range (text-storage rangeOfLine:(text-storage lineCount)))
           (let ((line-end (+ (head line-range) (head (tail line-range))))
-                (string-data (filter-escape-codes ((NSString alloc) initWithData:data encoding:NSUTF8StringEncoding))))
-            (@buffer-text insertString:string-data atLocation:line-end)))
+                (string-data ((NSString alloc) initWithData:data encoding:NSUTF8StringEncoding)))
+            (self handleOutput:string-data isError:isError)
+            (@buffer-text insertString:(self preprocessOutput:string-data isError:isError) atLocation:line-end)))
 
         ; 0-length data means we are at EOF.
         (unless (<= (data length) 0)
