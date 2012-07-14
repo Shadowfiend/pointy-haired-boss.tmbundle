@@ -93,16 +93,19 @@
   (- preprocessOutput:(id)output isError:(BOOL)isError is
     (filter-escape-codes output))
 
+  (- appendOutput:(id)output is
+    (let (text-storage (@buffer-text textStorage))
+      (let (line-range (text-storage rangeOfLine:(text-storage lineCount)))
+        (let (line-end (+ (head line-range) (head (tail line-range))))
+          (@buffer-text insertString:output atLocation:line-end)))))
+
   (- outputReceived:(id) notification is
     (if (or (eq (notification object) @std-out) (eq (notification object) @std-err))
       (let ((isError (eq (notification object) @std-err))
-            (data ((notification userInfo) objectForKey:NSFileHandleNotificationDataItem))
-            (text-storage (@buffer-text textStorage)))
-        (let (line-range (text-storage rangeOfLine:(text-storage lineCount)))
-          (let ((line-end (+ (head line-range) (head (tail line-range))))
-                (string-data ((NSString alloc) initWithData:data encoding:NSUTF8StringEncoding)))
-            (self handleOutput:string-data isError:isError)
-            (@buffer-text insertString:(self preprocessOutput:string-data isError:isError) atLocation:line-end)))
+          (data ((notification userInfo) objectForKey:NSFileHandleNotificationDataItem)))
+        (let (string-data ((NSString alloc) initWithData:data encoding:NSUTF8StringEncoding))
+          (self handleOutput:string-data isError:isError)
+          (self appendOutput:(self preprocessOutput:string-data isError:isError)))
 
         ; 0-length data means we are at EOF.
         (unless (<= (data length) 0)
